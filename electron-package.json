@@ -1,0 +1,63 @@
+
+{
+  "name": "smart-medical-lab-desktop",
+  "version": "1.0.0",
+  "description": "نظام المختبر الذكي - تطبيق سطح المكتب للتحليل الطبي بالذكاء الاصطناعي",
+  "main": "dist-electron/main-electron.js",
+  "scripts": {
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:5173 && electron .\"",
+    "build:electron": "tsc src/main-electron.ts --outDir dist-electron && tsc src/preload.ts --outDir dist-electron",
+    "dist": "npm run build && npm run build:electron && electron-builder",
+    "dist:win": "npm run build && npm run build:electron && electron-builder --win",
+    "dist:mac": "npm run build && npm run build:electron && electron-builder --mac",
+    "dist:linux": "npm run build && npm run build:electron && electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.smartmedicallab.desktop",
+    "productName": "المختبر الذكي",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*",
+      "ai-backend/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "ai-backend",
+        "to": "ai-backend"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "build/icon.icns",
+      "category": "public.app-category.medical"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "build/icon.png",
+      "category": "Science"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "author": "Smart Medical Lab Team",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^32.2.0",
+    "electron-builder": "^25.1.7",
+    "concurrently": "^9.0.1",
+    "wait-on": "^8.0.1"
+  }
+}
